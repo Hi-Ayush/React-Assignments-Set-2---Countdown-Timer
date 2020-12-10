@@ -4,17 +4,24 @@ import "../styles/App.css";
 const App = () => {
   // write your code here
 
-  const [currentTime, setCurrentTime] = React.useState("");
-  const handleRemainingTime = () => {
-    let inputTime = +currentTime;
+  const [currentTime, setCurrentTime] = React.useState(0);
+
+  const handleRemainingTime = (inputTime, event) => {
+    if (event.keyCode !== 13) return;
     inputTime = Math.floor(inputTime);
     if (inputTime <= 0) {
       inputTime = 0;
     }
-    while (inputTime > 0) {
-      setCurrentTime(inputTime--);
-    }
+    setCurrentTime(inputTime);
   };
+  useEffect(() => {
+    if (currentTime > 0) {
+      const id = setInterval(() => {
+        setCurrentTime(currentTime - 1);
+      }, 1000);
+    }
+    return () => clearInterval(id);
+  }, [currentTime]);
 
   return (
     <div className="wrapper">
@@ -24,8 +31,9 @@ const App = () => {
           <input
             id="timeCount"
             type="number"
-            onChage={(event) => setCurrentTime(event.target.value)}
-            onKeyDown={handleRemainingTime}
+            onKeyDown={(event) =>
+              handleRemainingTime(event.target.value, event)
+            }
           />{" "}
           sec.
         </h1>
