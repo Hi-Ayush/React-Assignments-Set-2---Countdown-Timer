@@ -4,21 +4,18 @@ import "../styles/App.css";
 const App = () => {
   // write your code here
 
-  const [currentTime, setCurrentTime] = React.useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
 
-  const handleRemainingTime = (inputTime, event) => {
+  const handleKeyDown = (event, inputTime) => {
     if (event.keyCode !== 13) return;
     inputTime = Math.floor(inputTime);
-    if (inputTime <= 0) {
-      inputTime = 0;
-    }
+    if (inputTime < 0) inputTime = 0;
     setCurrentTime(inputTime);
   };
   useEffect(() => {
+    let id = null;
     if (currentTime > 0) {
-      const id = setInterval(() => {
-        setCurrentTime(currentTime - 1);
-      }, 1000);
+      id = setInterval(() => setCurrentTime(currentTime - 1), 1000);
     }
     return () => clearInterval(id);
   }, [currentTime]);
@@ -30,10 +27,7 @@ const App = () => {
           Reverse countdown for
           <input
             id="timeCount"
-            type="number"
-            onKeyDown={(event) =>
-              handleRemainingTime(event.target.value, event)
-            }
+            onKeyDown={(event) => handleKeyDown(event, event.target.value)}
           />{" "}
           sec.
         </h1>
