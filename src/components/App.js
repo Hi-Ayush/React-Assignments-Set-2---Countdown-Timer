@@ -18,7 +18,7 @@ const App = () => {
       id = setInterval(() => setCurrentTime(currentTime - 1), 1000);
     }
     return () => clearInterval(id);
-  }, [currentTime]);
+  });
 
   return (
     <div className="wrapper">
